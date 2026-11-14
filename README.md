@@ -1,12 +1,12 @@
 # THE LOST SIGNAL
 
-[![Deploy to GitHub Pages](https://github.com/OWNER/the-lost-signal/actions/workflows/deploy.yml/badge.svg)](https://github.com/OWNER/the-lost-signal/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/Uj1710glitch/THE-LOST-SIGNAL/actions/workflows/deploy.yml/badge.svg)](https://github.com/Uj1710glitch/THE-LOST-SIGNAL/actions/workflows/deploy.yml)
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Three.js](https://img.shields.io/badge/Three.js-r169-000000?style=flat&logo=three.js&logoColor=white)](https://threejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Live Demo:** [https://<your-username>.github.io/the-lost-signal/](https://<your-username>.github.io/the-lost-signal/)
+> **Live Demo:** [https://uj1710glitch.github.io/THE-LOST-SIGNAL/](https://uj1710glitch.github.io/THE-LOST-SIGNAL/)
 
 ---
 
@@ -97,8 +97,8 @@ npm -v
 
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/<your-username>/the-lost-signal.git
-   cd the-lost-signal
+   git clone https://github.com/Uj1710glitch/THE-LOST-SIGNAL.git
+   cd THE-LOST-SIGNAL
    ```
 
 2. Install dependencies:
@@ -144,7 +144,7 @@ This repository includes a pre-configured GitHub Actions workflow (`.github/work
    git add .
    git commit -m "feat: initial commit for the lost signal"
    git branch -M main
-   git remote add origin https://github.com/<your-username>/the-lost-signal.git
+   git remote add origin https://github.com/Uj1710glitch/THE-LOST-SIGNAL.git
    git push -u origin main
    ```
 
@@ -158,7 +158,7 @@ This repository includes a pre-configured GitHub Actions workflow (`.github/work
    - You can inspect the build and deployment progress in the **Actions** tab of your repository.
    - Once completed, your game will be live at:
      ```
-     https://<your-username>.github.io/the-lost-signal/
+     https://uj1710glitch.github.io/THE-LOST-SIGNAL/
      ```
 
 ### Subdirectory Path Compatibility
