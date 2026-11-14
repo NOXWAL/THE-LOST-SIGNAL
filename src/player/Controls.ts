@@ -7,8 +7,10 @@ export interface InputState {
   right: boolean;
   sprint: boolean;
   jump: boolean;
+  crouch: boolean;
   mouseDeltaX: number;
   mouseDeltaY: number;
+  zoomDelta: number;
 }
 
 export class Controls {
@@ -20,8 +22,10 @@ export class Controls {
     right: false,
     sprint: false,
     jump: false,
+    crouch: false,
     mouseDeltaX: 0,
-    mouseDeltaY: 0
+    mouseDeltaY: 0,
+    zoomDelta: 0
   };
 
   private isLocked = false;
@@ -38,6 +42,7 @@ export class Controls {
     this.canvas.addEventListener('click', this.requestPointerLock.bind(this));
     document.addEventListener('pointerlockchange', this.onPointerLockChange.bind(this));
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
+    window.addEventListener('wheel', this.onWheel.bind(this), { passive: true });
   }
 
   private requestPointerLock(): void {
@@ -55,6 +60,10 @@ export class Controls {
       this.state.mouseDeltaX = e.movementX || 0;
       this.state.mouseDeltaY = e.movementY || 0;
     }
+  }
+
+  private onWheel(e: WheelEvent): void {
+    this.state.zoomDelta = Math.sign(e.deltaY) * 0.5;
   }
 
   private onKeyDown(e: KeyboardEvent): void {
@@ -86,6 +95,11 @@ export class Controls {
         this.state.sprint = true;
         this.eventBus.emit('INPUT_ACTION', { action: 'sprint', value: true });
         break;
+      case 'ControlLeft':
+      case 'KeyC':
+        this.state.crouch = true;
+        this.eventBus.emit('INPUT_ACTION', { action: 'crouch', value: true });
+        break;
       case 'Space':
         this.state.jump = true;
         this.eventBus.emit('INPUT_ACTION', { action: 'jump', value: true });
@@ -100,6 +114,15 @@ export class Controls {
       case 'Tab':
         e.preventDefault();
         this.eventBus.emit('INPUT_ACTION', { action: 'toggleInventory', value: true });
+        break;
+      case 'KeyJ':
+        this.eventBus.emit('INPUT_ACTION', { action: 'toggleJournal', value: true });
+        break;
+      case 'KeyF':
+        this.eventBus.emit('INPUT_ACTION', { action: 'toggleFlashlight', value: true });
+        break;
+      case 'Escape':
+        this.eventBus.emit('INPUT_ACTION', { action: 'pauseGame', value: true });
         break;
     }
   }
@@ -126,6 +149,10 @@ export class Controls {
       case 'ShiftRight':
         this.state.sprint = false;
         break;
+      case 'ControlLeft':
+      case 'KeyC':
+        this.state.crouch = false;
+        break;
       case 'Space':
         this.state.jump = false;
         break;
@@ -135,6 +162,7 @@ export class Controls {
   public resetDeltas(): void {
     this.state.mouseDeltaX = 0;
     this.state.mouseDeltaY = 0;
+    this.state.zoomDelta = 0;
   }
 
   public destroy(): void {
@@ -143,5 +171,6 @@ export class Controls {
     this.canvas.removeEventListener('click', this.requestPointerLock.bind(this));
     document.removeEventListener('pointerlockchange', this.onPointerLockChange.bind(this));
     document.removeEventListener('mousemove', this.onMouseMove.bind(this));
+    window.removeEventListener('wheel', this.onWheel.bind(this));
   }
 }

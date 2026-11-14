@@ -1,18 +1,32 @@
 import * as THREE from 'three';
 import { Controls } from './Controls';
+import { Physics } from '../systems/Physics';
 
 export class CameraController {
   private camera: THREE.PerspectiveCamera;
   private controls: Controls;
-  private yaw = 0;
-  private pitch = 0;
-  private sensitivity = 0.002;
-  private targetPosition = new THREE.Vector3();
-  private cameraOffset = new THREE.Vector3(0, 1.8, 0); // Eye height
+  private physics?: Physics;
 
-  constructor(camera: THREE.PerspectiveCamera, controls: Controls) {
+  private yaw = 0;
+  private pitch = 0.2;
+  private distance = 4.5;
+  private minDistance = 1.8;
+  private maxDistance = 9.0;
+  private sensitivity = 0.0022;
+
+  private targetPosition = new THREE.Vector3();
+  private currentCameraPos = new THREE.Vector3();
+  private lookTarget = new THREE.Vector3();
+  private headOffset = new THREE.Vector3(0, 1.6, 0);
+
+  constructor(camera: THREE.PerspectiveCamera, controls: Controls, physics?: Physics) {
     this.camera = camera;
     this.controls = controls;
+    this.physics = physics;
+  }
+
+  public setPhysics(physics: Physics): void {
+    this.physics = physics;
   }
 
   public setTarget(target: THREE.Vector3): void {
@@ -35,26 +49,56 @@ export class CameraController {
     return this.yaw;
   }
 
-  public update(): void {
+  public update(delta: number): void {
     const deltaX = this.controls.state.mouseDeltaX;
     const deltaY = this.controls.state.mouseDeltaY;
+    const zoom = this.controls.state.zoomDelta;
 
     this.yaw -= deltaX * this.sensitivity;
     this.pitch -= deltaY * this.sensitivity;
 
-    // Clamp pitch
-    const maxPitch = Math.PI / 2 - 0.05;
-    this.pitch = Math.max(-maxPitch, Math.min(maxPitch, this.pitch));
+    // Clamp pitch between looking slightly down and straight up
+    const minPitch = -0.3;
+    const maxPitch = 1.25;
+    this.pitch = Math.max(minPitch, Math.min(maxPitch, this.pitch));
 
-    this.camera.position.copy(this.targetPosition).add(this.cameraOffset);
+    // Smooth zoom adjustment
+    this.distance = Math.max(this.minDistance, Math.min(this.maxDistance, this.distance + zoom));
 
-    // Calculate look target
-    const lookTarget = new THREE.Vector3();
-    lookTarget.x = this.camera.position.x + Math.sin(this.yaw) * Math.cos(this.pitch);
-    lookTarget.y = this.camera.position.y + Math.sin(this.pitch);
-    lookTarget.z = this.camera.position.z - Math.cos(this.yaw) * Math.cos(this.pitch);
+    // Compute ideal spherical camera offset
+    const focusPoint = this.targetPosition.clone().add(this.headOffset);
+    let desiredDist = this.distance;
 
-    this.camera.lookAt(lookTarget);
+    const offsetDir = new THREE.Vector3(
+      Math.sin(this.yaw) * Math.cos(this.pitch),
+      Math.sin(this.pitch),
+      Math.cos(this.yaw) * Math.cos(this.pitch)
+    ).normalize();
+
+    // Collision raycast against buildings & walls to prevent camera clipping
+    if (this.physics) {
+      const colliders = this.physics.getNearbyColliders(focusPoint.x, focusPoint.z);
+      const testRay = new THREE.Ray(focusPoint, offsetDir);
+      for (const box of colliders) {
+        const intersection = testRay.intersectBox(box, new THREE.Vector3());
+        if (intersection) {
+          const hitDist = focusPoint.distanceTo(intersection);
+          if (hitDist < desiredDist) {
+            desiredDist = Math.max(1.2, hitDist - 0.3);
+          }
+        }
+      }
+    }
+
+    const idealCameraPos = focusPoint.clone().addScaledVector(offsetDir, desiredDist);
+
+    // Smooth spherical interpolation (GTA camera feel)
+    this.currentCameraPos.lerp(idealCameraPos, Math.min(1.0, delta * 15));
+    this.camera.position.copy(this.currentCameraPos);
+
+    // Look slightly above player waist / at chest-head level
+    this.lookTarget.lerp(focusPoint, Math.min(1.0, delta * 20));
+    this.camera.lookAt(this.lookTarget);
 
     this.controls.resetDeltas();
   }

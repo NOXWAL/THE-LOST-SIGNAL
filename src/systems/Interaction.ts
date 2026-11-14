@@ -7,6 +7,7 @@ export interface Interactable {
   position: THREE.Vector3;
   radius: number;
   prompt: string;
+  promptType?: 'inspect' | 'talk' | 'use' | 'collect';
   onInteract: () => void;
 }
 
@@ -59,6 +60,7 @@ export class Interaction implements ISystem {
         this.eventBus.emit('INTERACTION_AVAILABLE', {
           id: closest.id,
           label: closest.prompt,
+          promptType: closest.promptType || 'inspect',
           action: closest.onInteract
         });
       } else {
