@@ -1,6 +1,6 @@
 import { Game } from './core/Game';
 
-window.addEventListener('DOMContentLoaded', () => {
+function initGame() {
   const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
   const uiContainer = document.getElementById('ui-container') as HTMLElement;
 
@@ -14,4 +14,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Expose for debugging in dev
   (window as any).__LOST_SIGNAL_GAME__ = game;
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initGame);
+} else {
+  initGame();
+}
