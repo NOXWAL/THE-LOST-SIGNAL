@@ -1,12 +1,12 @@
 # THE LOST SIGNAL
 
-[![Deploy to GitHub Pages](https://github.com/Uj1710glitch/THE-LOST-SIGNAL/actions/workflows/deploy.yml/badge.svg)](https://github.com/Uj1710glitch/THE-LOST-SIGNAL/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/NOXWAL/THE-LOST-SIGNAL/actions/workflows/deploy.yml/badge.svg)](https://github.com/Uj1710glitch/THE-LOST-SIGNAL/actions/workflows/deploy.yml)
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Three.js](https://img.shields.io/badge/Three.js-r169-000000?style=flat&logo=three.js&logoColor=white)](https://threejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Live Demo:** [https://uj1710glitch.github.io/THE-LOST-SIGNAL/](https://uj1710glitch.github.io/THE-LOST-SIGNAL/)
+> **Live Demo:** [https://NOXWAL.github.io/THE-LOST-SIGNAL/](https://NOXWAL.github.io/THE-LOST-SIGNAL/)
 
 ---
 
